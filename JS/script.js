@@ -1,3 +1,40 @@
+// ======================================
+// OMNIRA BACKGROUND MUSIC
+// ======================================
+
+const bgMusic = new Audio("assets/music/shape-of-my-heart.mp3");
+
+bgMusic.loop = true;
+bgMusic.volume = 0.35;
+
+let musicStarted = false;
+
+function startBackgroundMusic() {
+    if (musicStarted) return;
+
+    bgMusic.play()
+        .then(() => {
+            musicStarted = true;
+
+            // Hapus listener setelah musik berhasil diputar
+            document.removeEventListener("click", startBackgroundMusic);
+            document.removeEventListener("touchstart", startBackgroundMusic);
+            document.removeEventListener("keydown", startBackgroundMusic);
+        })
+        .catch(error => {
+            console.log("Menunggu interaksi pengguna:", error);
+        });
+}
+
+// Coba autoplay saat halaman dibuka
+window.addEventListener("load", () => {
+    startBackgroundMusic();
+});
+
+// Jika autoplay diblokir, mulai saat pengguna menyentuh halaman
+document.addEventListener("click", startBackgroundMusic);
+document.addEventListener("touchstart", startBackgroundMusic);
+document.addEventListener("keydown", startBackgroundMusic);
 
 // ======================================
 // OMNIRA PERSONAL ASSISTANT
@@ -192,6 +229,16 @@ function showNextMessage() {
 // ======================================
 
 function startOrContinue() {
+
+    if (!musicStarted) {
+    bgMusic.play()
+        .then(() => {
+            musicStarted = true;
+        })
+        .catch(error => {
+            console.log("Musik gagal diputar:", error);
+        });
+    }
 
     // MEMULAI DARI PESAN PERTAMA
 
