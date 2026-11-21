@@ -1,3 +1,4 @@
+
 // ======================================
 // OMNIRA BACKGROUND MUSIC
 // ======================================
@@ -9,32 +10,30 @@ bgMusic.volume = 0.35;
 
 let musicStarted = false;
 
+// Fungsi memulai musik
 function startBackgroundMusic() {
     if (musicStarted) return;
 
     bgMusic.play()
         .then(() => {
             musicStarted = true;
-
-            // Hapus listener setelah musik berhasil diputar
-            document.removeEventListener("click", startBackgroundMusic);
-            document.removeEventListener("touchstart", startBackgroundMusic);
-            document.removeEventListener("keydown", startBackgroundMusic);
+            console.log("OMNIRA music started!");
         })
         .catch(error => {
-            console.log("Menunggu interaksi pengguna:", error);
+            console.log("Musik belum dapat diputar:", error);
         });
 }
 
-// Coba autoplay saat halaman dibuka
+// Coba autoplay ketika website dibuka
 window.addEventListener("load", () => {
     startBackgroundMusic();
 });
 
-// Jika autoplay diblokir, mulai saat pengguna menyentuh halaman
-document.addEventListener("click", startBackgroundMusic);
-document.addEventListener("touchstart", startBackgroundMusic);
-document.addEventListener("keydown", startBackgroundMusic);
+// Satu kali interaksi pengguna di halaman
+document.addEventListener("pointerdown", startBackgroundMusic, {
+    once: true
+});
+
 
 // ======================================
 // OMNIRA PERSONAL ASSISTANT
