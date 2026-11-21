@@ -4,7 +4,13 @@
 // APOLOGY SYSTEM
 // ======================================
 
+
+// ======================================
+// DAFTAR PERCAKAPAN OMNIRA
+// ======================================
+
 const messages = [
+
     "Hai, kamu pasti icha ya, masterku selalu bercerita betapa lembut dan cantiknya dirimu. Website ini dibuat tanpa sepengetahuan Master, jadi tiap kalimat ini aku mengambilnya secara langsung dari pengakuan Master kepadaku.",
 
     "Maaf aku langsung basa-basi, perkenalkan Aku Adalah kecerdasan buatan Master, Master menamaiku OMNIRA, senang bertemu denganmu.",
@@ -20,33 +26,50 @@ const messages = [
     "Aku OMNIRA tidak berharap satu halaman website ini langsung menghapus rasa kesalmu. Dia hanya ingin menunjukkan bahwa kamu berarti, dan bahwa permintaan maaf ini datang dengan niat untuk belajar menjadi lebih baik.",
 
     "Aku merindukan ketika Master bercerita betapa senang dan bahagianya dia saat bersamamu, dan aku tahu dia ingin kembali merasakan momen bergurau denganmu. Aku berharap kamu bisa memberinya kesempatan untuk memperbaiki kesalahan dan membuktikan bahwa dia bisa menjadi pria yang lebih baik."
+
 ];
+
 
 // ======================================
 // MENGAMBIL ELEMENT HTML
 // ======================================
 
 const dialogue = document.getElementById("dialogue");
+
 const nextBtn = document.getElementById("nextBtn");
+
 const restartBtn = document.getElementById("restartBtn");
+
 const cursor = document.getElementById("cursor");
+
 const letter = document.getElementById("letter");
 
-// Pastikan semua elemen tersedia
+
+// ======================================
+// VALIDASI ELEMENT HTML
+// ======================================
+
 if (!dialogue || !nextBtn || !restartBtn || !cursor || !letter) {
+
     console.error("OMNIRA ERROR: Ada elemen HTML yang tidak ditemukan.");
+
 }
 
+
 // ======================================
-// VARIABEL
+// VARIABEL SISTEM
 // ======================================
 
-let index = 0;
+let index = -1;
+
 let typing = false;
+
 let timer = null;
+
 let charIndex = 0;
 
 const initialText = "Tekan tombol untuk memulai percakapan.";
+
 
 // ======================================
 // ANIMASI MENGETIK
@@ -54,15 +77,18 @@ const initialText = "Tekan tombol untuk memulai percakapan.";
 
 function typeMessage() {
 
-    if (typing || index >= messages.length) return;
+    if (typing || index < 0 || index >= messages.length) return;
 
     clearInterval(timer);
 
     typing = true;
+
     charIndex = 0;
 
     nextBtn.disabled = true;
+
     nextBtn.textContent = "OMNIRA sedang berbicara...";
+
     dialogue.textContent = "";
 
     cursor.classList.remove("hidden");
@@ -71,25 +97,34 @@ function typeMessage() {
 
     timer = setInterval(() => {
 
-        dialogue.textContent = currentMessage.slice(0, charIndex + 1);
+        dialogue.textContent =
+            currentMessage.slice(0, charIndex + 1);
+
         charIndex++;
+
+        // JIKA PESAN SELESAI
 
         if (charIndex >= currentMessage.length) {
 
             clearInterval(timer);
+
             timer = null;
 
             typing = false;
+
             nextBtn.disabled = false;
 
             nextBtn.textContent =
                 index === messages.length - 1
                 ? "Baca pesan dari master ♡"
                 : "Lanjutkan ›";
+
         }
 
     }, 35);
+
 }
+
 
 // ======================================
 // PERCAKAPAN BERIKUTNYA
@@ -97,14 +132,19 @@ function typeMessage() {
 
 function showNextMessage() {
 
+    // JIKA MASIH MENGETIK
+    // KLIK AKAN MENYELESAIKAN PESAN SAAT INI
+
     if (typing) {
 
         clearInterval(timer);
+
         timer = null;
 
         dialogue.textContent = messages[index];
 
         typing = false;
+
         nextBtn.disabled = false;
 
         nextBtn.textContent =
@@ -113,24 +153,39 @@ function showNextMessage() {
             : "Lanjutkan ›";
 
         return;
+
     }
+
+
+    // MENAMPILKAN PESAN BERIKUTNYA
 
     if (index < messages.length - 1) {
 
         index++;
+
         typeMessage();
 
-    } else {
+    }
+
+
+    // SEMUA PESAN SELESAI
+
+    else {
 
         letter.classList.remove("hidden");
+
         letter.classList.add("reveal");
 
         nextBtn.classList.add("hidden");
+
         cursor.classList.add("hidden");
 
         releaseHearts();
+
     }
+
 }
+
 
 // ======================================
 // TOMBOL MULAI / LANJUTKAN
@@ -138,14 +193,24 @@ function showNextMessage() {
 
 function startOrContinue() {
 
-    if (index === 0 && dialogue.textContent === initialText) {
+    // MEMULAI DARI PESAN PERTAMA
+
+    if (index === -1) {
+
+        index = 0;
 
         typeMessage();
+
         return;
+
     }
 
+    // MELANJUTKAN PERCAKAPAN
+
     showNextMessage();
+
 }
+
 
 // ======================================
 // MENGULANG PERCAKAPAN
@@ -154,23 +219,31 @@ function startOrContinue() {
 function restartConversation() {
 
     clearInterval(timer);
+
     timer = null;
 
-    index = 0;
+    index = -1;
+
     charIndex = 0;
+
     typing = false;
 
     dialogue.textContent = initialText;
 
     letter.classList.add("hidden");
+
     letter.classList.remove("reveal");
 
     nextBtn.classList.remove("hidden");
+
     nextBtn.disabled = false;
+
     nextBtn.textContent = "Mulai percakapan ✦";
 
     cursor.classList.remove("hidden");
+
 }
+
 
 // ======================================
 // EFEK HATI
@@ -178,7 +251,8 @@ function restartConversation() {
 
 function releaseHearts() {
 
-    const heartsContainer = document.getElementById("hearts");
+    const heartsContainer =
+        document.getElementById("hearts");
 
     if (!heartsContainer) return;
 
@@ -187,17 +261,30 @@ function releaseHearts() {
         const heart = document.createElement("span");
 
         heart.className = "heart";
+
         heart.textContent = ["♡", "♥", "✦"][i % 3];
 
-        heart.style.left = Math.random() * 100 + "%";
-        heart.style.animationDelay = Math.random() * 1.6 + "s";
-        heart.style.color = i % 2 ? "#ff91c8" : "#8deaff";
+        heart.style.left =
+            Math.random() * 100 + "%";
+
+        heart.style.animationDelay =
+            Math.random() * 1.6 + "s";
+
+        heart.style.color =
+            i % 2 ? "#ff91c8" : "#8deaff";
 
         heartsContainer.appendChild(heart);
 
-        setTimeout(() => heart.remove(), 5200);
+        setTimeout(() => {
+
+            heart.remove();
+
+        }, 5200);
+
     }
+
 }
+
 
 // ======================================
 // MEMBUAT BINTANG
@@ -205,7 +292,8 @@ function releaseHearts() {
 
 function createStars() {
 
-    const stars = document.getElementById("stars");
+    const stars =
+        document.getElementById("stars");
 
     if (!stars) return;
 
@@ -214,25 +302,45 @@ function createStars() {
         const star = document.createElement("i");
 
         star.className = "star";
-        star.style.left = Math.random() * 100 + "%";
-        star.style.top = Math.random() * 100 + "%";
 
-        star.style.animationDelay = Math.random() * 3 + "s";
-        star.style.animationDuration = (2 + Math.random() * 4) + "s";
+        star.style.left =
+            Math.random() * 100 + "%";
+
+        star.style.top =
+            Math.random() * 100 + "%";
+
+        star.style.animationDelay =
+            Math.random() * 3 + "s";
+
+        star.style.animationDuration =
+            (2 + Math.random() * 4) + "s";
 
         stars.appendChild(star);
+
     }
+
 }
+
 
 // ======================================
 // EVENT LISTENER
 // ======================================
 
-nextBtn.addEventListener("click", startOrContinue);
-restartBtn.addEventListener("click", restartConversation);
+nextBtn.addEventListener(
+    "click",
+    startOrContinue
+);
+
+restartBtn.addEventListener(
+    "click",
+    restartConversation
+);
+
 
 // ======================================
 // MENJALANKAN SISTEM
 // ======================================
 
 createStars();
+
+console.log("OMNIRA PERSONAL ASSISTANT: SYSTEM ONLINE");
