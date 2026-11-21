@@ -10,7 +10,6 @@ bgMusic.volume = 0.35;
 
 let musicStarted = false;
 
-// Fungsi memulai musik
 function startBackgroundMusic() {
     if (musicStarted) return;
 
@@ -24,12 +23,10 @@ function startBackgroundMusic() {
         });
 }
 
-// Coba autoplay ketika website dibuka
 window.addEventListener("load", () => {
     startBackgroundMusic();
 });
 
-// Satu kali interaksi pengguna di halaman
 document.addEventListener("pointerdown", startBackgroundMusic, {
     once: true
 });
@@ -47,7 +44,7 @@ document.addEventListener("pointerdown", startBackgroundMusic, {
 
 const messages = [
 
-    "Hai, kamu pasti icha ya, masterku selalu bercerita betapa lembut dan cantiknya dirimu. Website ini dibuat tanpa sepengetahuan Master, jadi tiap kalimat ini aku mengambilnya secara langsung dari pengakuan Master kepadaku.",
+    "Hai, kamu pasti icha ya, Masterku selalu bercerita betapa lembut dan cantiknya dirimu. Website ini dibuat tanpa sepengetahuan Master, jadi tiap kalimat ini aku mengambilnya secara langsung dari pengakuan Master kepadaku.",
 
     "Maaf aku langsung basa-basi, perkenalkan Aku Adalah kecerdasan buatan Master, Master menamaiku OMNIRA, senang bertemu denganmu.",
 
@@ -57,11 +54,11 @@ const messages = [
 
     "Bahkan aku sebagai asisten Master menjulukinya pria yang tidak peka dan bodoh soal percintaan.",
 
-    "Namun, di balik semua candaan itu, ada satu hal yang ingin kusampaikan dengan serius: Master tahu dia salah dan tidak ingin menganggap remeh perasaanmu.",
+    "Namun, di balik semua itu, ada satu hal yang ingin kusampaikan dengan serius: Master tahu dia salah dan tidak ingin menganggap remeh perasaanmu.",
 
-    "Aku OMNIRA tidak berharap satu halaman website ini langsung menghapus rasa kesalmu. Dia hanya ingin menunjukkan bahwa kamu berarti, dan bahwa permintaan maaf ini datang dengan niat untuk belajar menjadi lebih baik.",
+    "Aku OMNIRA tidak berharap satu halaman website ini langsung menghapus rasa kesalmu. Aku OMNIRA hanya ingin menunjukkan bahwa kamu sangat berarti untuknya, aku mohon jangan marah lagi ke Master.",
 
-    "Aku merindukan ketika Master bercerita betapa senang dan bahagianya dia saat bersamamu, dan aku tahu dia ingin kembali merasakan momen bergurau denganmu. Aku berharap kamu bisa memberinya kesempatan untuk memperbaiki kesalahan dan membuktikan bahwa dia bisa menjadi pria yang lebih baik."
+    "Aku merindukan ketika Master bercerita betapa senang dan bahagianya dia saat bersamamu, dan aku tahu dia ingin kembali merasakan momen bercanda denganmu. Aku berharap kamu bisa memberinya kesempatan untuk memperbaiki kesalahan dan membuktikan bahwa dia bisa menjadi pria yang lebih baik."
 
 ];
 
@@ -71,24 +68,13 @@ const messages = [
 // ======================================
 
 const dialogue = document.getElementById("dialogue");
-
 const nextBtn = document.getElementById("nextBtn");
-
 const restartBtn = document.getElementById("restartBtn");
-
 const cursor = document.getElementById("cursor");
-
 const letter = document.getElementById("letter");
 
-
-// ======================================
-// VALIDASI ELEMENT HTML
-// ======================================
-
 if (!dialogue || !nextBtn || !restartBtn || !cursor || !letter) {
-
     console.error("OMNIRA ERROR: Ada elemen HTML yang tidak ditemukan.");
-
 }
 
 
@@ -97,11 +83,8 @@ if (!dialogue || !nextBtn || !restartBtn || !cursor || !letter) {
 // ======================================
 
 let index = -1;
-
 let typing = false;
-
 let timer = null;
-
 let charIndex = 0;
 
 const initialText = "Tekan tombol untuk memulai percakapan.";
@@ -118,11 +101,9 @@ function typeMessage() {
     clearInterval(timer);
 
     typing = true;
-
     charIndex = 0;
 
     nextBtn.disabled = true;
-
     nextBtn.textContent = "OMNIRA sedang berbicara...";
 
     dialogue.textContent = "";
@@ -138,12 +119,9 @@ function typeMessage() {
 
         charIndex++;
 
-        // JIKA PESAN SELESAI
-
         if (charIndex >= currentMessage.length) {
 
             clearInterval(timer);
-
             timer = null;
 
             typing = false;
@@ -152,8 +130,8 @@ function typeMessage() {
 
             nextBtn.textContent =
                 index === messages.length - 1
-                ? "Baca pesan dari master ♡"
-                : "Lanjutkan ›";
+                    ? "Lanjut ke pertanyaan ♡"
+                    : "Lanjutkan ›";
 
         }
 
@@ -169,12 +147,11 @@ function typeMessage() {
 function showNextMessage() {
 
     // JIKA MASIH MENGETIK
-    // KLIK AKAN MENYELESAIKAN PESAN SAAT INI
+    // KLIK AKAN MENYELESAIKAN PESAN
 
     if (typing) {
 
         clearInterval(timer);
-
         timer = null;
 
         dialogue.textContent = messages[index];
@@ -185,8 +162,8 @@ function showNextMessage() {
 
         nextBtn.textContent =
             index === messages.length - 1
-            ? "Baca pesan dari master ♡"
-            : "Lanjutkan ›";
+                ? "Lanjut ke pertanyaan ♡"
+                : "Lanjutkan ›";
 
         return;
 
@@ -209,16 +186,170 @@ function showNextMessage() {
     else {
 
         letter.classList.remove("hidden");
-
         letter.classList.add("reveal");
 
         nextBtn.classList.add("hidden");
-
         cursor.classList.add("hidden");
 
         releaseHearts();
 
+        // MENAMPILKAN PERTANYAAN UNDANGAN
+        showInvitation();
+
     }
+
+}
+
+
+// ======================================
+// FITUR UNDANGAN IYA / TIDAK
+// ======================================
+
+function showInvitation() {
+
+    // MENCEGAH UNDANGAN MUNCUL GANDA
+
+    if (document.getElementById("invitationBox")) return;
+
+    const invitation = document.createElement("div");
+
+    invitation.id = "invitationBox";
+
+    invitation.innerHTML = `
+        <div style="
+            max-width: 500px;
+            margin: 30px auto;
+            padding: 25px 20px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        ">
+
+            <div style="
+                font-size: 35px;
+                margin-bottom: 12px;
+            ">💌</div>
+
+            <h2 style="
+                margin-bottom: 15px;
+                font-size: 23px;
+            ">
+                Ada satu pertanyaan lagi...
+            </h2>
+
+            <p style="
+                font-size: 17px;
+                line-height: 1.7;
+                margin-bottom: 25px;
+            ">
+                Apakah kamu mau keluar bersamaku nanti malam?
+            </p>
+
+            <div style="
+                display: flex;
+                justify-content: center;
+                gap: 15px;
+                flex-wrap: wrap;
+            ">
+
+                <button
+                    type="button"
+                    id="yesInvitation"
+                    style="
+                        padding: 12px 30px;
+                        border: none;
+                        border-radius: 30px;
+                        background: #e85d8e;
+                        color: white;
+                        font-size: 16px;
+                        font-weight: bold;
+                        cursor: pointer;
+                    "
+                >
+                    IYA ❤️
+                </button>
+
+                <button
+                    type="button"
+                    id="noInvitation"
+                    style="
+                        padding: 12px 30px;
+                        border: none;
+                        border-radius: 30px;
+                        background: #555;
+                        color: white;
+                        font-size: 16px;
+                        font-weight: bold;
+                        cursor: pointer;
+                    "
+                >
+                    TIDAK
+                </button>
+
+            </div>
+
+            <p style="
+                margin-top: 20px;
+                font-size: 12px;
+                opacity: 0.7;
+            ">
+                Jawabanmu akan diteruskan melalui WhatsApp.
+            </p>
+
+        </div>
+    `;
+
+    // MENEMPATKAN UNDANGAN SETELAH SURAT
+
+    letter.insertAdjacentElement("afterend", invitation);
+
+    // EVENT TOMBOL JAWABAN
+
+    document.getElementById("yesInvitation")
+        .addEventListener("click", () => {
+            sendAnswer("iya");
+        });
+
+    document.getElementById("noInvitation")
+        .addEventListener("click", () => {
+            sendAnswer("tidak");
+        });
+
+}
+
+
+// ======================================
+// MENGIRIM JAWABAN KE WHATSAPP
+// ======================================
+
+function sendAnswer(answer) {
+
+    const phoneNumber = "6281239908869";
+
+    let message = "";
+
+    if (answer === "iya") {
+
+        message = "Aku mau keluar bersamamu nanti malam. ❤️";
+
+    } else if (answer === "tidak") {
+
+        message = "Maaf ya, aku belum bisa keluar bersamamu nanti malam.";
+
+    } else {
+
+        return;
+
+    }
+
+    const whatsappURL =
+        "https://wa.me/" + phoneNumber +
+        "?text=" + encodeURIComponent(message);
+
+    window.open(whatsappURL, "_blank");
 
 }
 
@@ -230,13 +361,13 @@ function showNextMessage() {
 function startOrContinue() {
 
     if (!musicStarted) {
-    bgMusic.play()
-        .then(() => {
-            musicStarted = true;
-        })
-        .catch(error => {
-            console.log("Musik gagal diputar:", error);
-        });
+        bgMusic.play()
+            .then(() => {
+                musicStarted = true;
+            })
+            .catch(error => {
+                console.log("Musik gagal diputar:", error);
+            });
     }
 
     // MEMULAI DARI PESAN PERTAMA
@@ -269,21 +400,25 @@ function restartConversation() {
     timer = null;
 
     index = -1;
-
     charIndex = 0;
-
     typing = false;
 
     dialogue.textContent = initialText;
 
     letter.classList.add("hidden");
-
     letter.classList.remove("reveal");
 
+    // MENGHAPUS UNDANGAN JIKA ADA
+
+    const invitation =
+        document.getElementById("invitationBox");
+
+    if (invitation) {
+        invitation.remove();
+    }
+
     nextBtn.classList.remove("hidden");
-
     nextBtn.disabled = false;
-
     nextBtn.textContent = "Mulai percakapan ✦";
 
     cursor.classList.remove("hidden");
@@ -322,9 +457,7 @@ function releaseHearts() {
         heartsContainer.appendChild(heart);
 
         setTimeout(() => {
-
             heart.remove();
-
         }, 5200);
 
     }
